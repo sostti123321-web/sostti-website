@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOS TTI — Exam Inquiry</title>
+    <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js">
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #eef2f7;
+            --surface: #ffffff;
+            --navy: #0c2550;
+            --blue: #1648a0;
+            --blue-light: #e8eef9;
+            --accent: #d4880a;
+            --accent-bg: #fdf3de;
+            --green: #166534;
+            --green-bg: #f0faf4;
+            --green-bd: #86efac;
+            --muted: #64748b;
+            --border: #cbd5e1;
+            --text: #0f172a;
+            --red: #991b1b;
+            --red-bg: #fef2f2;
+            --red-bd: #fca5a5;
+            --radius: 10px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 4px 16px rgba(12, 37, 80, .07);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Animations ────────────────────────────────────────────── */
+        @keyframes fadeSlideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-18px) scale(0.97);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(212, 136, 10, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(212, 136, 10, 0);
+            }
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-on-load {
+            animation: fadeSlideDown 0.6s ease forwards;
+        }
+
+        .animate-result {
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .animate-item {
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .animate-item:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+        .animate-item:nth-child(2) {
+            animation-delay: 0.10s;
+        }
+        .animate-item:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+        .animate-item:nth-child(4) {
+            animation-delay: 0.20s;
+        }
+        .animate-item:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+        .animate-item:nth-child(6) {
+            animation-delay: 0.30s;
+        }
+
+        /* ── Header ────────────────────────────────────────────────── */
+        header {
+            background: var(--navy);
+            color: #fff;
+            animation: fadeSlideDown 0.7s ease forwards;
+        }
+
+        .header-stripe {
+            background: var(--accent);
+            text-align: center;
+            padding: 5px 16px;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+            color: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-stripe::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+
+        .header-inner {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .header-emblem {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .08);
+            border: 2px solid rgba(255, 255, 255, .15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+            transition: transform 0.4s ease, border-color 0.3s ease;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .header-emblem:hover {
+            transform: scale(1.08) rotate(-4deg);
+            border-color: var(--accent);
+        }
+
+        .header-emblem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .header-emblem svg {
+            width: 30px;
+            height: 30px;
+            stroke: var(--accent);
+        }
+
+        .header-text h1 {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -.015em;
+        }
+
+        .header-text p {
+            font-size: 12.5px;
+            color: rgba(255, 255, 255, .55);
+            margin-top: 3px;
+        }
+
+        /* ── Main ──────────────────────────────────────────────────── */
+        main {
+            flex: 1;
+            max-width: 780px;
+            width: 100%;
+            margin: 36px auto;
+            padding: 0 16px 60px;
+        }
+
+        /* ── Search Card ───────────────────────────────────────────── */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 20px rgba(12, 37, 80, .12);
+        }
+
+        .search-card {
+            padding: 32px 36px 28px;
+            margin-bottom: 24px;
+            animation: fadeSlideDown 0.7s ease forwards;
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+
+        .search-card h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .search-card h2 svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--blue);
+        }
+
+        .search-card .sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 22px;
+            padding-left: 26px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .field-wrap {
+            position: relative;
+            flex: 1;
+        }
+
+        .field-wrap .field-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .field-wrap .field-icon svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--muted);
+            transition: stroke 0.3s ease;
+        }
+
+        .field-wrap:focus-within .field-icon svg {
+            stroke: var(--blue);
+        }
+
+        #cnicInput {
+            width: 100%;
+            padding: 12px 14px 12px 40px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14.5px;
+            letter-spacing: .04em;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            background: #f8fafc;
+            color: var(--text);
+            transition: border-color .18s, background .18s, box-shadow .25s;
+        }
+
+        #cnicInput:focus {
+            border-color: var(--blue);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(22, 72, 160, .08);
+        }
+
+        #cnicInput::placeholder {
+            color: #a8b4c4;
+        }
+
+        #searchBtn {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .18s, transform .15s, box-shadow .25s;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #searchBtn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent 60%);
+            pointer-events: none;
+        }
+
+        #searchBtn svg {
+            width: 15px;
+            height: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        #searchBtn:hover {
+            background: var(--navy);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(22, 72, 160, .25);
+        }
+
+        #searchBtn:hover svg {
+            transform: scale(1.15);
+        }
+
+        #searchBtn:active {
+            transform: scale(.95);
+        }
+
+        .format-hint {
+            margin-top: 9px;
+            font-size: 12px;
+            color: var(--muted);
+            padding-left: 2px;
+        }
+
+        .format-hint code {
+            font-family: 'IBM Plex Mono', monospace;
+            background: #f1f5f9;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 11.5px;
+        }
+
+        /* ── Result ────────────────────────────────────────────────── */
+        #result {
+            display: none;
+        }
+
+        #result.show {
+            display: block;
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Result card header */
+        .result-head {
+            background: var(--navy);
+            color: #fff;
+            border-radius: var(--radius) var(--radius) 0 0;
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-head::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .04);
+            pointer-events: none;
+        }
+
+        .result-head .r-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .12);
+            border: 1.5px solid rgba(255, 255, 255, .2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.4s ease, background 0.3s ease;
+            animation: pulseGlow 2.5s ease-in-out infinite;
+        }
+
+        .result-head .r-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--accent);
+        }
+
+        .result-head .r-text h3 {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .result-head .r-text span {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .5);
+        }
+
+        /* Info body */
+        .result-body {
+            padding: 26px 28px;
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 13px 15px;
+            transition: border-color 0.25s, background 0.25s, transform 0.2s;
+        }
+
+        .info-item:hover {
+            border-color: var(--blue);
+            background: #f1f6fd;
+            transform: translateY(-2px);
+        }
+
+        .info-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .info-item .lbl {
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .info-item .lbl svg {
+            width: 12px;
+            height: 12px;
+            stroke: var(--muted);
+            transition: stroke 0.3s ease;
+        }
+
+        .info-item:hover .lbl svg {
+            stroke: var(--blue);
+        }
+
+        .info-item .val {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .info-item.mono .val {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+        }
+
+        /* Exam box */
+        .exam-section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .09em;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+            animation: slideInLeft 0.5s ease forwards;
+        }
+
+        .exam-section-label svg {
+            width: 13px;
+            height: 13px;
+            stroke: var(--green);
+        }
+
+        .exam-box {
+            background: var(--green-bg);
+            border: 1.5px solid var(--green-bd);
+            border-radius: 8px;
+            padding: 18px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .exam-box:hover {
+            border-color: var(--green);
+            box-shadow: 0 2px 12px rgba(22, 101, 52, .10);
+        }
+
+        .exam-item .lbl {
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .exam-item .lbl svg {
+            width: 12px;
+            height: 12px;
+            stroke: var(--green);
+        }
+
+        .exam-item .val {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .exam-item .val.mono {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 15px;
+        }
+
+        /* Pending */
+        .pending-box {
+            background: var(--accent-bg);
+            border: 1.5px solid #f5c842;
+            border-radius: 8px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+            color: #7c5200;
+            animation: slideInLeft 0.5s ease forwards;
+        }
+
+        .pending-box svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--accent);
+            flex-shrink: 0;
+            margin-top: 1px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .pending-box strong {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        /* Error */
+        .error-card {
+            background: var(--red-bg);
+            border: 1.5px solid var(--red-bd);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .error-card .err-icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .error-card .err-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--red);
+        }
+
+        .error-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--red);
+            margin-bottom: 4px;
+        }
+
+        .error-card p {
+            font-size: 13px;
+            color: #7f1d1d;
+            line-height: 1.5;
+        }
+
+        .error-card strong {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        footer {
+            background: var(--navy);
+            color: rgba(255, 255, 255, .4);
+            text-align: center;
+            padding: 14px;
+            font-size: 11.5px;
+            letter-spacing: .02em;
+        }
+
+        /* ── Responsive ────────────────────────────────────────────── */
+        @media (max-width: 540px) {
+            .search-card {
+                padding: 22px 18px;
+            }
+            .input-row {
+                flex-direction: column;
+            }
+            #searchBtn {
+                justify-content: center;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .info-item.full {
+                grid-column: 1;
+            }
+            .exam-box {
+                grid-template-columns: 1fr;
+            }
+            .result-head {
+                padding: 16px 18px;
+            }
+            .result-body {
+                padding: 18px 18px;
+            }
+            .header-inner {
+                padding: 18px 16px;
+                gap: 14px;
+            }
+            .header-emblem {
+                width: 50px;
+                height: 50px;
+            }
+            .header-text h1 {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-stripe">NVC Integrated Assessment 2026</div>
+        <div class="header-inner">
+            <div class="header-emblem">
+                <!-- Logo image – fallback to icon if image missing -->
+                <img src="images/sos-logo.webp" alt="SOS TTI Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <i data-lucide="graduation-cap" style="display:none;"></i>
+            </div>
+            <div class="header-text">
+                <h1>SOS Technical Training Institute</h1>
+                <p>Korangi, Karachi &nbsp;&middot;&nbsp; Computer Operator &mdash; Exam Inquiry Portal</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="card search-card">
+            <h2><i data-lucide="search"></i> Check Your Exam Schedule</h2>
+            <p class="sub">Enter your CNIC number to view your exam date, time, trade, and registration details.</p>
+            <div class="input-row">
+                <div class="field-wrap">
+                    <div class="field-icon"><i data-lucide="credit-card"></i></div>
+                    <input type="text" id="cnicInput" placeholder="42201-1234567-9" maxlength="15" autocomplete="off" spellcheck="false" />
+                </div>
+                <button id="searchBtn" onclick="doSearch()">
+                    <i data-lucide="search"></i> Search
+                </button>
+            </div>
+            <p class="format-hint">Format: <code>XXXXX-XXXXXXX-X</code> &mdash; dashes are added automatically</p>
+        </div>
+
+        <div id="result"></div>
+
+    </main>
+
+    <footer>
+        SOS Technical Training Institute, Korangi, Karachi &nbsp;&middot;&nbsp; Batch-Wise Assessee Report &nbsp;&middot;&nbsp; 2026
+    </footer>
+
+    <script>
+        // ─── STUDENT DATA (updated with corrected timings from Batch-wise SOS.pdf) ───
+        const STUDENTS = [
+            { "Name": "AMARA", "Father": "RIAZ ULLAH", "CNIC": "42401-7163845-4", "Registration #": "12-2026-00246", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MAKDALINI", "Father": "AMANAT MASIH", "CNIC": "42501-7468243-6", "Registration #": "12-2026-00245", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "ASIYA SEEMI", "Father": "HAKEEM ABDUL QAYOOM ...", "CNIC": "42401-9000259-0", "Registration #": "12-2026-00244", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "HASNAIN", "Father": "MUHAMMAD MAROOF", "CNIC": "42501-5105380-3", "Registration #": "12-2026-00243", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SHAZMA", "Father": "ALLAH DITTA", "CNIC": "41102-4028702-8", "Registration #": "12-2026-00242", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SONIA", "Father": "KHALIL UR REHMAN", "CNIC": "42501-9446925-4", "Registration #": "12-2026-00241", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "ALISHBA", "Father": "KHALIL UR REHMAN", "CNIC": "42501-0341999-2", "Registration #": "12-2026-00240", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "FIZA", "Father": "SARWAR ALI", "CNIC": "41703-0717014-8", "Registration #": "12-2026-00239", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "ALIZA BIBI", "Father": "ZAREEN KHAN", "CNIC": "42501-0638906-0", "Registration #": "12-2026-00238", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MUSKAN KHAN", "Father": "SHOAIB KHAN", "CNIC": "42603-0361788-4", "Registration #": "12-2026-00237", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "AMNA", "Father": "MUHAMMAD MUSHTAQ", "CNIC": "42501-9145622-4", "Registration #": "12-2026-00236", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MUNEEBA", "Father": "ABDUL KHALIQ", "CNIC": "42201-8757361-0", "Registration #": "12-2026-00235", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MARIA", "Father": "JAHANZAIB KHAN", "CNIC": "42201-6809776-8", "Registration #": "12-2026-00234", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "JAZBIA NOOR", "Father": "SHOAIB KHAN", "CNIC": "42603-0361789-0", "Registration #": "12-2026-00233", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SARIM EJAZ", "Father": "MUHAMMAD EJAZ", "CNIC": "42201-1248025-3", "Registration #": "12-2026-00232", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MUSKAN", "Father": "SAJJAD AHMED", "CNIC": "42501-7316438-8", "Registration #": "12-2026-00231", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SADAF BIBI", "Father": "FAIZ ALI", "CNIC": "42501-6737902-2", "Registration #": "12-2026-00230", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SUMERA", "Father": "MUHAMMAD WASEEM", "CNIC": "41304-3120584-8", "Registration #": "12-2026-00229", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SYEDA KULSOOM SHERAZI", "Father": "ABDUL SATTAR SHAH", "CNIC": "42501-8401176-0", "Registration #": "12-2026-00228", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SYEDA SIDRAH SHERAZI", "Father": "ABDUL SATTAR SHAH", "CNIC": "42501-5257614-2", "Registration #": "12-2026-00227", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "KHADIJA", "Father": "SHER MUHAMMAD", "CNIC": "42501-5554695-0", "Registration #": "12-2026-00226", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "TANZILA", "Father": "ABDULLAH JAN", "CNIC": "42501-1581142-2", "Registration #": "12-2026-00225", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "SOHAIL KHAN", "Father": "FAZAL RAHEEM", "CNIC": "42501-7193047-1", "Registration #": "12-2026-00224", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "SAWAIRA GUL", "Father": "REHMAT ULLAH KHAN", "CNIC": "42501-6485557-0", "Registration #": "12-2026-00223", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "MUHAMMAD AWAIS", "Father": "HUSSAIN GUL", "CNIC": "42501-3974684-9", "Registration #": "12-2026-00222", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "FARMAN", "Father": "SHER AFZAL", "CNIC": "42501-1765486-1", "Registration #": "12-2026-00221", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "ABDUL SATTAR", "Father": "ABDUL REHMAN", "CNIC": "42501-8545365-9", "Registration #": "12-2026-00220", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "HUMA AFZA", "Father": "RAFAQAT MAHMOOD", "CNIC": "42501-0742481-2", "Registration #": "12-2026-00219", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "AMNA BIBI", "Father": "MUHAMMAD KHAN", "CNIC": "42501-6372111-2", "Registration #": "12-2026-00218", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "FARHEEN", "Father": "MUHAMMAD HANIF", "CNIC": "42501-6226777-2", "Registration #": "12-2026-00217", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "SAWAIRA NAZ", "Father": "AMJAD KHAN", "CNIC": "42501-7232924-6", "Registration #": "12-2026-00216", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "AMEEN ULLAH", "Father": "MUHIB ULLAH", "CNIC": "42501-4115604-1", "Registration #": "12-2026-00215", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "MUHAMMAD NAVEED UMER", "Father": "MUHAMMAD SAHIB", "CNIC": "42501-0979630-1", "Registration #": "12-2026-00214", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "MALAIKA", "Father": "TASAWAR HUSSAIN", "CNIC": "42604-0351142-4", "Registration #": "12-2026-00213", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "SADIA FATIMA", "Father": "LIAQUAT ALI", "CNIC": "42201-9330509-2", "Registration #": "12-2026-00212", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "AIMAN FATIMA", "Father": "LIAQUAT ALI", "CNIC": "42201-1977326-6", "Registration #": "12-2026-00211", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "LAIBA", "Father": "SHER REHMAN", "CNIC": "42501-4395090-2", "Registration #": "12-2026-00210", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "NOMAN SHER", "Father": "HASSAN SHER", "CNIC": "42501-3571583-1", "Registration #": "12-2026-00209", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "ABDUL MOIZ", "Father": "MUHAMMAD ZAKRIA", "CNIC": "42501-1681534-3", "Registration #": "12-2026-00208", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "LAIBA BAKHTIAR", "Father": "BAKHTYAR GUL", "CNIC": "42501-5078170-0", "Registration #": "12-2026-00207", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "ANEESA BIBI", "Father": "GULZAR SHAH", "CNIC": "42201-7430273-0", "Registration #": "12-2026-00206", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MUHAMMAD MUSTAFA", "Father": "MUHAMMAD MASKEEN", "CNIC": "42501-3474602-5", "Registration #": "12-2026-00205", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "ABDUL REHMAN", "Father": "IMRAN KHAN", "CNIC": "42501-5372030-9", "Registration #": "12-2026-00204", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "HASSAN HUSSAIN", "Father": "SAJID HUSSAIN", "CNIC": "42501-2463157-5", "Registration #": "12-2026-00203", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "ISHRAT BAQAR", "Father": "MUHAMMAD BAQAR KEHAR", "CNIC": "42501-4958156-4", "Registration #": "12-2026-00202", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MAHNOOR", "Father": "SHOUKAT KHAN", "CNIC": "42501-9080585-0", "Registration #": "12-2026-00201", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "AYESHA BAQAR", "Father": "MUHAMMAD BAQAR KEHAR", "CNIC": "42501-8604103-0", "Registration #": "12-2026-00200", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "IQRA GHULAM", "Father": "GHULAM RABBANI", "CNIC": "42501-5418671-6", "Registration #": "12-2026-00199", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "IQRA", "Father": "ABDUL SALAM", "CNIC": "42501-9304083-6", "Registration #": "12-2026-00198", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MUHAMMAD SHAFIQ", "Father": "SAIF UL HAQ", "CNIC": "41406-7980719-7", "Registration #": "12-2026-00197", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "ASMA", "Father": "MUHAMMAD ALI", "CNIC": "42604-0410993-0", "Registration #": "12-2026-00196", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MUHAMMAD ALI", "Father": "IMTIAZ ALI QADRI", "CNIC": "42201-3045765-1", "Registration #": "12-2026-00195", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "HAMZA KHAN", "Father": "MUHAMMAD EJAZ", "CNIC": "42501-9243634-7", "Registration #": "12-2026-00194", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "HINA BASHIR", "Father": "MUHAMMAD BASHIR", "CNIC": "42501-6394728-8", "Registration #": "12-2026-00193", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "AYESHA MURTAZA", "Father": "GHULAM MURTAZA", "CNIC": "42501-9987877-8", "Registration #": "12-2026-00192", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "HAYAT KHAN", "Father": "AMAN KHAN", "CNIC": "42501-9482627-9", "Registration #": "12-2026-00191", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SYED HASEEB SHAH", "Father": "GUL FARAZ SHAH", "CNIC": "42501-8299443-1", "Registration #": "12-2026-00190", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "FAZILA AHSAN", "Father": "AHSAN ULLAH", "CNIC": "42201-4012471-4", "Registration #": "12-2026-00189", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "Mahjabeen", "Father": "M.Idress", "CNIC": "42501-9863109-0", "Registration #": "12-2026-00188", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MAHNOOR", "Father": "NAVEED AHMED", "CNIC": "42603-0352242-8", "Registration #": "12-2026-00187", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "AMNA FAROOQ", "Father": "MUHAMMAD FAROOQ", "CNIC": "42501-6516217-0", "Registration #": "12-2026-00186", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "KAREEMULLAH", "Father": "ABID SHAH", "CNIC": "42501-0355529-9", "Registration #": "12-2026-00185", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "SALMAN KHAN", "Father": "GULZAR KHAN", "CNIC": "13504-5638600-9", "Registration #": "12-2026-00184", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "MUHAMMAD MUSHTAQ", "Father": "PERZADA", "CNIC": "13301-5783817-9", "Registration #": "12-2026-00183", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "HADEESA", "Father": "JAN ZAIB KHAN", "CNIC": "42501-2982070-6", "Registration #": "12-2026-00182", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "AMNA", "Father": "MUHAMMAD NADEEM ARAI...", "CNIC": "42501-4403190-8", "Registration #": "12-2026-00181", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "SUFYAN SHAIKH", "Father": "TASLEEM AHMED", "CNIC": "42501-6160585-7", "Registration #": "12-2026-00180", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "REHAN RAUF", "Father": "ABDUL RAUF", "CNIC": "42501-6742822-7", "Registration #": "12-2026-00179", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "NOMAN AHMED", "Father": "GUL BAHADUR", "CNIC": "42501-9913338-9", "Registration #": "12-2026-00178", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "SHAH FAHAD", "Father": "RAHIM GUL", "CNIC": "14301-0503373-1", "Registration #": "12-2026-00177", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "ALISHA AZEEM", "Father": "MUHAMMAD AZEEM", "CNIC": "13503-4343136-2", "Registration #": "12-2026-00176", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "MEHDI HASSAN", "Father": "NIAZ ALI", "CNIC": "43205-2274609-9", "Registration #": "12-2026-00175", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "ZAIB UN NISA", "Father": "KHALID MEHMOOD", "CNIC": "42501-0282952-8", "Registration #": "12-2026-00174", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "MUHAMMAD FAROOQ", "Father": "MUHAMMAD YOUSUF", "CNIC": "42301-3624286-7", "Registration #": "12-2026-00173", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "MUHAMMAD DANISH", "Father": "NIAZ MUHAMMAD", "CNIC": "42501-7228937-1", "Registration #": "12-2026-00172", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "RAO MUHAMMAD WAKEEL", "Father": "SAJID AYUB", "CNIC": "42501-4354100-7", "Registration #": "12-2026-00171", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "QAISER KHAN", "Father": "NISAR AHMED", "CNIC": "42501-2353874-3", "Registration #": "12-2026-00170", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "MUHAMMAD SHAYAN SAMI", "Father": "MUHAMMAD SAMI ULLAH", "CNIC": "42501-5809558-7", "Registration #": "12-2026-00169", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "MUHAMMAD ALI", "Father": "NASIB ZADA", "CNIC": "42501-8206267-7", "Registration #": "12-2026-00168", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "ZAIN UL ABEDIN", "Father": "MUHAMMAD SABIR KHAN", "CNIC": "42501-1025424-9", "Registration #": "12-2026-00167", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SHAHID KHAN", "Father": "SYED RAZIQ", "CNIC": "42501-7952359-5", "Registration #": "12-2026-00166", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "ABDULLAH", "Father": "SYED JOHAR", "CNIC": "15101-6094651-5", "Registration #": "12-2026-00165", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "UMAIR ALI", "Father": "MUHAMMAD SADIQ", "CNIC": "42501-3120190-5", "Registration #": "12-2026-00164", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MUHAMMAD HUZAIFA", "Father": "QARI SHOUKAT HAYAT", "CNIC": "42501-0663809-5", "Registration #": "12-2026-00163", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "FAIZAN KHAN", "Father": "IMRAN", "CNIC": "42501-7994746-7", "Registration #": "12-2026-00162", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "ADEELA", "Father": "SULTAN AHMED SULTAN", "CNIC": "42201-7335783-0", "Registration #": "12-2026-00161", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "AFSHAN", "Father": "JANZAIB KHAN", "CNIC": "42501-7094696-4", "Registration #": "12-2026-00160", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "LAIBA", "Father": "MUHAMMAD IDREES", "CNIC": "42501-8980279-8", "Registration #": "12-2026-00159", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "RAHEELA BANO", "Father": "ABDUL MAJID", "CNIC": "42501-7343674-6", "Registration #": "12-2026-00158", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SHAHNOOR BIBI", "Father": "MUHAMMAD JAN", "CNIC": "13101-7245707-2", "Registration #": "12-2026-00157", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "BIBI HAJRA", "Father": "MUHAMMAD ZAHIR SHAH", "CNIC": "42501-9072094-8", "Registration #": "12-2026-00156", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "LARAIB", "Father": "MUHAMMAD ASIF", "CNIC": "42201-2020907-8", "Registration #": "12-2026-00155", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "AMNA KHAN", "Father": "NAZIM KHAN", "CNIC": "42501-1158581-8", "Registration #": "12-2026-00154", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "MALAIKA", "Father": "NAEEM", "CNIC": "42201-2184136-6", "Registration #": "12-2026-00153", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "SAWAIRA", "Father": "MUHAMMAD RIAZ", "CNIC": "42501-4080031-8", "Registration #": "12-2026-00152", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "FIZA", "Father": "AZIZ UR REHMAN", "CNIC": "44103-9402182-0", "Registration #": "12-2026-00151", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "RUMMAN FATIMA", "Father": "MUHAMMAD MUNEER AHME...", "CNIC": "42201-7662768-6", "Registration #": "12-2026-00150", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "RAFIA ANFAL MALIK", "Father": "ABDUL HAMEED BABAR", "CNIC": "42501-3259835-2", "Registration #": "12-2026-00149", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "ZAINOOR ALI", "Father": "ALI SHER", "CNIC": "42501-0405669-1", "Registration #": "12-2026-00148", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "HIRA REHMAT", "Father": "REHMAT ELAHI", "CNIC": "15201-1767563-4", "Registration #": "12-2026-00147", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "HIRA", "Father": "MUHAMMAD JAMIL", "CNIC": "42501-2033844-4", "Registration #": "12-2026-00146", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "DUA", "Father": "MUHAMMAD JAMIL", "CNIC": "42501-5754243-8", "Registration #": "12-2026-00145", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "EMAN JAVED", "Father": "MUHAMMAD JAVED", "CNIC": "42501-8300038-2", "Registration #": "12-2026-00144", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "SHAZIA BIBI", "Father": "MUHAMMAD RAHIM", "CNIC": "21106-8160535-4", "Registration #": "12-2026-00143", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "LAIBA", "Father": "MUSHTAQ AHMED", "CNIC": "42501-6046059-0", "Registration #": "12-2026-00142", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "UROOJ ZULFIQAR", "Father": "ZULFIQAR", "CNIC": "35202-2761739-8", "Registration #": "12-2026-00141", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "NAIMAT ULLAH", "Father": "MUHAMMAD ALI SHAH", "CNIC": "42301-7920019-7", "Registration #": "12-2026-00140", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "ABDULLAH", "Father": "AJMAL KHAN", "CNIC": "15103-0425657-5", "Registration #": "12-2026-00139", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "RAHEEM ULLAH", "Father": "FAZAL KAREEM", "CNIC": "42501-0824679-9", "Registration #": "12-2026-00138", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "SHUMAILA", "Father": "ABDULLAH", "CNIC": "71602-0340192-8", "Registration #": "12-2026-00137", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "HANEEF KHAN", "Father": "ASLAM KHAN", "CNIC": "42501-4447555-9", "Registration #": "12-2026-00136", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "ADEEL RASHEED", "Father": "MUHAMMAD", "CNIC": "42501-0659872-9", "Registration #": "12-2026-00135", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "AYAN ALI QURESHI", "Father": "IRFAN ALI QURESHI", "CNIC": "42201-6053245-9", "Registration #": "12-2026-00134", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "MUHAMMAD BILAL", "Father": "ABDUL JABBAR", "CNIC": "42501-3843853-9", "Registration #": "12-2026-00133", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "RANA MUHAMMAD FARHAN", "Father": "MUHAMMAD DILSHAD", "CNIC": "42501-8400431-9", "Registration #": "12-2026-00132", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "NOMAN BABU", "Father": "NABI BUX", "CNIC": "43102-5375168-3", "Registration #": "12-2026-00131", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "AHSAN ULLAH", "Father": "SHABBIR ZADA", "CNIC": "42501-8019592-1", "Registration #": "12-2026-00130", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "09:00 to 01:00" },
+            { "Name": "HAFSA GUL", "Father": "GULZAR ALI", "CNIC": "42501-2786226-2", "Registration #": "12-2026-00129", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" },
+            { "Name": "FAIZA AJMEER", "Father": "AJMEER KHAN", "CNIC": "42501-4190607-0", "Registration #": "12-2026-00128", "Qualification": "NVC Level 2 in Information Technology (Computer Operator)", "Date": "7/11/2026", "Time": "01:00 to 05:00" }
+        ];
+
+        // ─── Lookup Map ──────────────────────────────────────────────
+        const lookup = {};
+        STUDENTS.forEach(s => {
+            const k = (s.CNIC || '').trim().toUpperCase();
+            if (k) lookup[k] = s;
+        });
+
+        // ─── Helpers ──────────────────────────────────────────────────
+        function formatDate(d) {
+            if (!d) return '—';
+            const p = d.split('/');
+            if (p.length === 3) {
+                const m = ['', 'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+                return p[1] + ' ' + m[parseInt(p[0])] + ' ' + p[2];
+            }
+            return d;
+        }
+
+        function esc(s) {
+            return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // ─── Render Icons ─────────────────────────────────────────────
+        function renderIcons() {
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                try { lucide.createIcons(); } catch (_) { /* ignore */ }
+            }
+        }
+
+        // ─── Search ──────────────────────────────────────────────────
+        function doSearch() {
+            const raw = document.getElementById('cnicInput').value.trim();
+            const key = raw.toUpperCase();
+            const area = document.getElementById('result');
+            area.style.display = 'block';
+            area.classList.add('show');
+
+            if (!raw) {
+                area.innerHTML = `
+              <div class="error-card">
+                <div class="err-icon"><i data-lucide="alert-circle"></i></div>
+                <div>
+                  <h3>No CNIC Entered</h3>
+                  <p>Please type your CNIC number in the field above and press Search.</p>
+                </div>
+              </div>`;
+                renderIcons();
+                return;
+            }
+
+            const s = lookup[key];
+            if (!s) {
+                area.innerHTML = `
+              <div class="error-card">
+                <div class="err-icon"><i data-lucide="user-x"></i></div>
+                <div>
+                  <h3>Record Not Found</h3>
+                  <p>No student found for CNIC <strong>${esc(raw)}</strong>.<br>
+                  Please verify the number and try again, or contact the institute.</p>
+                </div>
+              </div>`;
+                renderIcons();
+                return;
+            }
+
+            const hasExam = s.Date && s.Time;
+            const trade = (s.Qualification || '')
+                .replace('NVC Level 2 in Information Technology (', '')
+                .replace(')', '').trim() || 'Computer Operator';
+            const regNo = s['Registration #'] || '—';
+
+            const examHtml = hasExam ?
+                `<div class="exam-section-label">
+              <i data-lucide="check-circle-2"></i> Exam Schedule Confirmed
+            </div>
+            <div class="exam-box">
+              <div class="exam-item animate-item">
+                <div class="lbl"><i data-lucide="calendar"></i> Exam Date</div>
+                <div class="val">${esc(formatDate(s.Date))}</div>
+              </div>
+              <div class="exam-item animate-item">
+                <div class="lbl"><i data-lucide="clock"></i> Exam Time</div>
+                <div class="val mono">${esc(s.Time)}</div>
+              </div>
+            </div>` :
+                `<div class="pending-box">
+              <i data-lucide="clock"></i>
+              <div>
+                <strong>Exam Schedule Pending</strong>
+                Your schedule has not been assigned yet. Please contact the institute.
+              </div>
+            </div>`;
+
+            area.innerHTML = `
+            <div class="card animate-result">
+              <div class="result-head">
+                <div class="r-icon"><i data-lucide="user-check"></i></div>
+                <div class="r-text">
+                  <h3>${esc(s.Name)}</h3>
+                  <span>Registered Student &mdash; Computer Operator</span>
+                </div>
+              </div>
+              <div class="result-body">
+                <div class="info-grid">
+                  <div class="info-item animate-item">
+                    <div class="lbl"><i data-lucide="user"></i> Student Name</div>
+                    <div class="val">${esc(s.Name)}</div>
+                  </div>
+                  <div class="info-item animate-item">
+                    <div class="lbl"><i data-lucide="users"></i> Father's Name</div>
+                    <div class="val">${esc(s.Father || '—')}</div>
+                  </div>
+                  <div class="info-item mono animate-item">
+                    <div class="lbl"><i data-lucide="credit-card"></i> CNIC</div>
+                    <div class="val">${esc(s.CNIC)}</div>
+                  </div>
+                  <div class="info-item mono animate-item">
+                    <div class="lbl"><i data-lucide="hash"></i> Registration No.</div>
+                    <div class="val">${esc(regNo)}</div>
+                  </div>
+                  <div class="info-item full animate-item">
+                    <div class="lbl"><i data-lucide="briefcase"></i> Trade / Qualification</div>
+                    <div class="val">${esc(trade)}</div>
+                  </div>
+                </div>
+                ${examHtml}
+              </div>
+            </div>`;
+
+            renderIcons();
+        }
+
+        // ─── Enter key ───────────────────────────────────────────────
+        document.getElementById('cnicInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') doSearch();
+        });
+
+        // ─── Auto-format CNIC ────────────────────────────────────────
+        document.getElementById('cnicInput').addEventListener('input', function() {
+            let v = this.value.replace(/[^0-9]/g, '');
+            let out = '';
+            if (v.length <= 5) {
+                out = v;
+            } else if (v.length <= 12) {
+                out = v.slice(0, 5) + '-' + v.slice(5);
+            } else {
+                out = v.slice(0, 5) + '-' + v.slice(5, 12) + '-' + v.slice(12, 13);
+            }
+            this.value = out;
+        });
+
+        // ─── Render icons on page load ──────────────────────────────
+        document.addEventListener('DOMContentLoaded', renderIcons);
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            setTimeout(renderIcons, 100);
+        } else {
+            window.addEventListener('load', renderIcons);
+        }
+    </script>
+
+</body>
+</html>

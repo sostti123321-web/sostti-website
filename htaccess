@@ -1,0 +1,163 @@
+# ============================================================
+# SOSTTI Production .htaccess - Apache 2.4+
+# Optimized for Performance, Security, and Clean URLs
+# ============================================================
+
+# 1. SECURITY SETTINGS
+# ------------------------------------------------------------
+Options -Indexes
+AddDefaultCharset UTF-8
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Content-Security-Policy "upgrade-insecure-requests"
+</IfModule>
+
+# MIME Types (Ensure WebP is recognized)
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+</IfModule>
+
+
+# 2. GZIP COMPRESSION
+# ------------------------------------------------------------
+<IfModule mod_deflate.c>
+    # Compress HTML, CSS, JavaScript, Text, XML and fonts
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE application/x-font
+    AddOutputFilterByType DEFLATE application/x-font-opentype
+    AddOutputFilterByType DEFLATE application/x-font-otf
+    AddOutputFilterByType DEFLATE application/x-font-truetype
+    AddOutputFilterByType DEFLATE application/x-font-ttf
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE image/x-icon
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+</IfModule>
+
+
+# 3. BROWSER CACHING (EXPIRES HEADERS)
+# ------------------------------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+
+    # CSS / JS (1 Month)
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+
+    # Images (1 Year)
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+
+    # Fonts (1 Year)
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+
+    # HTML (No cache to ensure updates show immediately)
+    ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+
+# 4. REWRITE RULES (HTTPS & Clean URLs)
+# ------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Redirect to HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Remove .html extension from links (Internal Redirect)
+    # If the user visits /page.html, redirect to /page
+    RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
+    RewriteRule ^ /%1 [NC,L,R=301]
+
+    # Serve the .html file internally for clean /page request
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.html -f
+    RewriteRule ^(.*)$ $1.html [NC,L]
+</IfModule>
+
+
+# 5. ERROR PAGES
+# ------------------------------------------------------------
+ErrorDocument 404 /index.html
+
+
+# 6. PHP SCRIPT HEADERS (SEO & Caching)
+# ------------------------------------------------------------
+# Prevent search engines from indexing the helper scripts & disable caching
+<FilesMatch "^(chat_proxy|get_ads)\.php$">
+    Header set X-Robots-Tag "noindex, nofollow"
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+</FilesMatch>
+
+# 7. ASSET & PHP PROTECTION (Prevent Direct URL Access)
+# ------------------------------------------------------------
+# This prevents users from accessing internal scripts, components,
+# and advertisement images directly via the browser URL.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Identify the sensitive resources to protect
+    # 1. get_ads.php & chat_proxy.php
+    # 2. components/ (HTML templates)
+    # 3. js/ (Core logic)
+    # 4. assets/style.css
+    # 5. images/ads/ (Internal advertisements)
+    
+    RewriteCond %{REQUEST_URI} get_ads\.php [NC,OR]
+    RewriteCond %{REQUEST_URI} chat_proxy\.php [NC,OR]
+    RewriteCond %{REQUEST_URI} components/ [NC,OR]
+    RewriteCond %{REQUEST_URI} js/ [NC,OR]
+    RewriteCond %{REQUEST_URI} assets/style\.css [NC,OR]
+    RewriteCond %{REQUEST_URI} images/ads/ [NC,OR]
+    RewriteCond %{REQUEST_URI} videos/ [NC,OR]
+    RewriteCond %{REQUEST_URI} pages/ [NC]
+
+    # Block if Referer is NOT from sostti.org
+    # This specifically blocks direct URL typing (Empty Referer) 
+    # and hotlinking from other sites.
+    RewriteCond %{HTTP_REFERER} !^https?://([^/]+\.)?sostti\.org [NC]
+    
+    # Skip block for local development
+    RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.1$
+    RewriteCond %{REMOTE_ADDR} !^::1$
+    
+    # 4. Forbidden!
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “alt-php84” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-alt-php84 .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
