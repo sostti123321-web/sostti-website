@@ -2,4 +2,28 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home2/sosttior/public_html
-    - /bin/cp -a . $DEPLOYPATH
+
+    # Delete old files
+    - /bin/rm -rf $DEPLOYPATH/api
+    - /bin/rm -rf $DEPLOYPATH/assets
+    - /bin/rm -rf $DEPLOYPATH/components
+    - /bin/rm -rf $DEPLOYPATH/images
+    - /bin/rm -rf $DEPLOYPATH/js
+    - /bin/rm -rf $DEPLOYPATH/pages
+    - /bin/rm -rf $DEPLOYPATH/videos
+
+    # Copy folders
+    - /bin/cp -R api $DEPLOYPATH/
+    - /bin/cp -R assets $DEPLOYPATH/
+    - /bin/cp -R components $DEPLOYPATH/
+    - /bin/cp -R images $DEPLOYPATH/
+    - /bin/cp -R js $DEPLOYPATH/
+    - /bin/cp -R pages $DEPLOYPATH/
+    - /bin/cp -R videos $DEPLOYPATH/
+
+    # Copy files
+    - /bin/cp index.html $DEPLOYPATH/
+    - /bin/cp exam_inquiry.html $DEPLOYPATH/
+    - /bin/cp chat_proxy.php $DEPLOYPATH/
+    - /bin/cp get_ads.php $DEPLOYPATH/
+    - /bin/cp .htaccess $DEPLOYPATH/
